@@ -20,7 +20,9 @@
 # Go workspace file
 go.work
 
-
+.vscode/
 resources/
 plans.txt
 out.jpg
+image-download.sh
+main-photo.jpg

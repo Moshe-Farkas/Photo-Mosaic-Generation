@@ -1,4 +1,4 @@
-module Photo_Mosaic_Generation
+module PHOTO_MOSAIC_GENERATION
 
 go 1.20
 

@@ -1,28 +1,14 @@
-/*
-create new empty image and write it to disk:
-img := image.NewRGBA(image.Rect(0, 0, 600, 200))
-for i := 0; i < img.Rect.Dy()+1; i++ {
-	for j := 0; j < img.Rect.Dx(); j++ {
-		pixelVal := color.RGBA {}
-		r, g, b := uint8(rand.Int()) % 255, uint8(rand.Int()) % 255, uint8(rand.Int()) % 255
-		pixelVal.A = 255
-		pixelVal.R = r
-		pixelVal.G = g
-		pixelVal.B = b
-		img.Set(j, i, pixelVal)
-	}
-}
-*/
 package main
 
 import (
-	"fmt"
-	"os"
+	"PHOTO_MOSAIC_GENERATION/src"
 	"errors"
+	"fmt"
 	"image/jpeg"
-	"Photo_Mosaic_Generation/src/mosaic_utils"
+	"log"
+	"os"
 )
-	
+
 const EXPECTED_ARGS_LEN = 3
 
 func main() {
@@ -31,8 +17,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
-	outputImage, err := mosaicUtils.CreateMosaicPhoto(mainPhotoPath, mosaicTilesFolderPath)
-	
+	outputImage, stats, err := src.CreateMosaicPhoto(mainPhotoPath, mosaicTilesFolderPath, 0.3)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
@@ -45,8 +30,10 @@ func main() {
 	defer outputFile.Close()
 	err = jpeg.Encode(outputFile, outputImage, &jpeg.Options{Quality: jpeg.DefaultQuality})
 	if err != nil {
-		panic(err)
+		log.Fatal(err.Error())
 	}
+	fmt.Println(stats.String())
+	fmt.Println("finished")
 }
 
 func usage() string {
@@ -71,3 +58,4 @@ func parseArgs() (string, string, error) {
 	}	
 	return mainPhotoPath, mosaicTilesFolderPath, nil
 }
+
